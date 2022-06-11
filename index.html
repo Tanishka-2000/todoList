@@ -5,12 +5,27 @@
         <title>To do list</title>
     </head>
     <body>
-            <input type="text" name="title">
+        <form >
+            <input type="text" name="title" placeholder="title">
+            <input type="text" name="description" placeholder="description">
+            <input type="date" name="duedate" placeholder="Due Date">
+            <select  name="priority">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low" selected>Low</option>
+            </select>
             <button type="button">+</button>
+        </form>
 
         <div class="list">
             <template>
-                <div></div>
+                <div>
+                    <p>Title: </p>
+                    <p>Description: </p>
+                    <p>Duedate: </p>
+                    <p>Piority: </p>
+                </div>
+                <hr>
             </template>
         </div>
 
