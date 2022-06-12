@@ -1,3 +1,11 @@
+
+let today = new Date();
+let date = document.querySelector('.header div');
+date.textContent = today.toDateString();
+
+
+
+
 let id = 0;
 const projects = [];
 const tasks = [];
