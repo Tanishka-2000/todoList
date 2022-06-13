@@ -1,29 +1,5 @@
-// styling
+import loadScreen from './loadScreen.js';
 
-let today = new Date();
-let date = document.querySelector('.header div');
-date.textContent = today.toDateString();
-
-const projectIcon = document.querySelector('form .addProject div');
-const priorityIcon = document.querySelector('form .addPriority div');
-// const duedateIcon = document.querySelector('form .addDueDate span');
-
-projectIcon.addEventListener('click', function(e){
-    let projectName = e.target.textContent;
-    e.target.parentElement.nextElementSibling.value = projectName;
-
-});
-
-priorityIcon.addEventListener('click', function(e){
-    let priority = e.target.textContent;
-    e.target.parentElement.nextElementSibling.value = priority;
-    // e.target.parentElement.style.display = 'none';
-});
-
-// ----------------------------------------------------
-
-
-// working
 let id = 0;
 const projects = ['Personal','Home','Work'];
 const tasks = [];
@@ -38,20 +14,8 @@ function task(title, duedate, priority, project){
     let id = getId();
     return {id, title, duedate, priority, project};
 }
-// private function
-function getData(){
-    if(localStorage.getItem('tasks')) {
-        let temp = localStorage.getItem('tasks');
-        let data = JSON.parse(temp);
-        return data;
-    }
-    return 'data not found';
-}
-// private function
-function updateLocalStorage(){
-    let data = JSON.stringify(tasks)
-    localStorage.setItem('tasks', data);
-}
+
+
 // private function
 function addTask(task){
     tasks.push(task);
@@ -150,10 +114,12 @@ const domElements = (function getDOMElements() {
 
 // ----------adding event listeners to buttons
 const headerButtons = document.querySelectorAll('.header button');
-headerFormCancelBtn = headerButtons[0];
-headerformAddTaskBtn = headerButtons[1];
-headerShowFormBtn = headerButtons[2];
+const headerFormCancelBtn = headerButtons[0];
+const headerformAddTaskBtn = headerButtons[1];
+const headerShowFormBtn = headerButtons[2];
 
 headerShowFormBtn.addEventListener('click', showForm);
 headerformAddTaskBtn.addEventListener('click', addnewTask);
 headerFormCancelBtn.addEventListener('click', cancelForm);
+
+loadScreen(domElements.getProjectList(), domElements.getTaskList());

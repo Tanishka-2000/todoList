@@ -93,7 +93,7 @@
     border: none;
     border-bottom: 1px solid #FCF8E8;
     outline: none;
-    display: none;
+    /* display: none; */
 }
 /* --------------- */
 .header{
@@ -192,11 +192,11 @@ form .addDueDate{
     font-size: 1rem;
 }
 
-form .addPriority:hover > *,
+/* form .addPriority:hover > *,
 form .addProject:hover > *,
 form .addDueDate:hover > *{
     display: block;
-}
+} */
 
 
 form .addPriority> div,

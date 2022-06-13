@@ -33,9 +33,12 @@
                 <h2>Projects</h2>
 
                 <div class="projects">
-                    <div><span class="material-symbols-outlined icon">folder_open</span>Personal</div>
+                    <template>
+                        <div><span class="material-symbols-outlined icon">folder_open</span></div>
+                    </template>
+                    <!-- <div><span class="material-symbols-outlined icon">folder_open</span>Personal</div>
                     <div><span class="material-symbols-outlined icon">folder_open</span>Home</div>
-                    <div><span class="material-symbols-outlined icon">folder_open</span>Work</div>
+                    <div><span class="material-symbols-outlined icon">folder_open</span>Work</div> -->
                 </div>
                 <button type="button" >+ add project</button>
                 <input type="text">
@@ -64,8 +67,8 @@
                         <span class="material-symbols-outlined">flag</span>
                         <div>
                             <p>priority high</p>
-                            <p>priority high</p>
-                            <p>priority high</p>
+                            <p>priority medium</p>
+                            <p>priority low</p>
                         </div>
                         <input type="hidden" name="priority">
                     </div>
@@ -90,7 +93,15 @@
                     <h1>Today</h1>
 
                     <div class="list">
-                        <div class="task">
+                        <template>
+                            <div class="task">
+                                <div class="deleteBtn"></div>
+                                <h3></h3>
+                                <p></p>
+                                <p></p>
+                            </div>
+                        </template>
+                        <!-- <div class="task">
                             <div class="deleteBtn"></div>
                             <h3>Water palnts</h3>
                             <p>Home</p>
@@ -118,8 +129,8 @@
                             <div class="deleteBtn"></div>
                             <h3>Call Edie</h3>
                             <p>Personal</p>
-                        </div>
-                        
+                        </div> -->
+
 
 
                     </div>
@@ -151,6 +162,7 @@
             </div>
  -->
         </div>
-        <script src="script.js" ></script>
+        <script src="styles.js" ></script>
+        <script src="main.js" ></script>
     </body>
 </html>
