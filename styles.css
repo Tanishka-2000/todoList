@@ -4,9 +4,31 @@
     padding: 0;
     border: none;
 }
+/* scrollbar */
+::-webkit-scrollbar {
+    display: none;
+  /* width: 5px;
+  position: absolute; */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* background: #f1f1f1; */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /* background: #888; */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  /* background: #555; */
+}
+/* container */
 .container{
     height: 100vh;
-    width: 100vw;
+    max-width: 100vw;
     display: grid;
     grid-template-columns: 1fr 3fr;
     grid-template-rows: 100px 1fr;
@@ -14,11 +36,13 @@
 }
 
 .sidebar{
+
     background-color: #DF7861;
     grid-row: 1/3;
     font-size: 2rem;
     font-family: 'Roboto', sans-serif;
     padding: 50px;
+    padding-right: 0;
     line-height: 2;
 
 }
@@ -46,6 +70,12 @@
     padding-bottom: 30px;
     border-bottom: 1px solid white;
 }
+.sidebar .options div:hover,
+.sidebar .projects div:hover{
+    background-color: #FCF8E8;
+    opacity: .9;
+    color: #DF7861;
+}
 .icon{
     font-size: 2rem;
     margin-right: 10px;
@@ -56,9 +86,19 @@
     font-size: 1.6rem;
     color: white;
 }
+.sidebar input{
+    font-size: 1.6rem;
+    background-color: inherit;
+    color: #FCF8E8;
+    border: none;
+    border-bottom: 1px solid #FCF8E8;
+    outline: none;
+    display: none;
+}
 /* --------------- */
 .header{
     background-color: #94B49F;
+    font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -66,12 +106,119 @@
     padding-left: 100px;
     padding-right: 100px;
 }
-.header button{
+.header button:nth-child(3){
     width: 70px;
     height: 70px;
     border-radius: 50%;
     font-size: 4rem;
     color: #94B49F;
+    background: #FCF8E8;
+}
+/* -----form------- */
+
+form{
+    padding: 10px;
+    display: flex;
+    align-items: flex-end;
+    border: 1px solid white;
+    background-color: #FCF8E8;
+    border-radius: 10px;
+    height: 80px;
+    display: none;
+}
+form div:nth-of-type(1){
+    position: relative;
+    background-color: #FCF8E8;
+}
+form input{
+    width: 300px;
+    border: none;
+    border-bottom: 1px solid #94B49F;
+    outline: none;
+    font-size: 2rem;
+    background-color: inherit;
+    color: #94B49F;
+}
+form input:not(:placeholder-shown) + label{
+    display: none;
+}
+form label{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-size: 2rem;
+    opacity: .6;
+}
+form div,
+form button{
+    margin-left: 10px;
+}
+form .material-symbols-outlined{
+    font-size: 2rem;
+}
+form div:nth-of-type(odd){
+    color: #94B49F;
+}
+form div:nth-of-type(even){
+    color: #DF7861;
+}
+form input[type='date']{
+    position: absolute;
+    color: #94B49F;
+    font-size: 1.5rem;
+    width: 180px;
+    display: none;
+    top:-35px;
+    left: -100px;
+}
+form button{
+    width: 90px;
+    height: 40px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    color: #FCF8E8;
+}
+form button:nth-of-type(1){
+    background-color: #DF7861;
+}
+form button:nth-of-type(2){
+    background-color: #94B49F;
+}
+
+form .addPriority,
+form .addProject,
+form .addDueDate{
+    position: relative;
+    font-size: 1rem;
+}
+
+form .addPriority:hover > *,
+form .addProject:hover > *,
+form .addDueDate:hover > *{
+    display: block;
+}
+
+
+form .addPriority> div,
+form .addProject> div{
+    position: absolute;
+    border: 1px solid;
+    border-radius: 5px;
+    display: none;
+}
+
+form .addPriority> div>p,
+form .addProject> div>p{
+    padding: 5px;
+    width: 100px;
+    border-bottom: 1px solid;
+    cursor: pointer;
+}
+form .addPriority> div>p:hover,
+form .addProject> div>p:hover{
+    background-color: #94B49F;
+    color: #FCF8E8;
+    opacity: .8;
 }
 /* --------------------- */
 
@@ -79,6 +226,7 @@
     background-color: #FCF8E8;
     font-size: 1.5rem;
     padding: 50px;
+    padding-right: 100px;
     font-family: 'Handlee', cursive;
 }
 .main h1{
@@ -87,7 +235,7 @@
 }
 .main .task{
     display: grid;
-    grid-template-columns: 50px 1fr 200px;
+    grid-template-columns: 50px 1fr 100px;
     border-bottom: 1px solid #94B49F;
     padding: 20px;
 }
@@ -120,4 +268,3 @@
     margin: 20px;
     color: gray;
 }
-/* ------------ */
