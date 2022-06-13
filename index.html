@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>To do list</title>
+        <!-- google fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <!-- google icons -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <!-- stylesheet -->
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <!--     SIDEBAR     -->
+            <div class="sidebar">
+                <div class="searchBar">
+                    <span class="material-symbols-outlined icon">search</span>
+                    <input type="text" id="search" placeholder=" ">
+                    <label for="search">search</label>
+                </div>
+
+                <div class="options">
+                    <div><span class="material-symbols-outlined icon">today</span>Today</div>
+                    <div><span class="material-symbols-outlined icon">calendar_month</span>Tomorrow</div>
+                    <div><span class="material-symbols-outlined icon">pending_actions</span>Upcoming</div>
+                    <div><span class="material-symbols-outlined icon">inventory_2</span>Anytime</div>
+                    <div><span class="material-symbols-outlined icon">priority_high</span>Important</div>
+                </div>
+
+                <h2>Projects</h2>
+
+                <div class="projects">
+                    <template>
+                        <div><span class="material-symbols-outlined icon">folder_open</span></div>
+                    </template>
+                    <!-- <div><span class="material-symbols-outlined icon">folder_open</span>Personal</div>
+                    <div><span class="material-symbols-outlined icon">folder_open</span>Home</div>
+                    <div><span class="material-symbols-outlined icon">folder_open</span>Work</div> -->
+                </div>
+                <button type="button" >+ add project</button>
+                <input type="text">
+
+            </div>
+            <!--     HEADER     -->
+            <div class="header">
+
+                <div></div>
+
+                <form >
+                    <div>
+                        <input type="text" id="task" placeholder=" ">
+                        <label for="addTask">Add a task</label>
+                    </div>
+                    <div class="addProject">
+                        <span class="material-symbols-outlined">folder_open</span>
+                        <div>
+                            <p>Personal</p>
+                            <p>Home</p>
+                            <p>Work</p>
+                        </div>
+                        <input type="hidden" name="projectName">
+                    </div>
+                    <div class="addPriority">
+                        <span class="material-symbols-outlined">flag</span>
+                        <div>
+                            <p>priority high</p>
+                            <p>priority medium</p>
+                            <p>priority low</p>
+                        </div>
+                        <input type="hidden" name="priority">
+                    </div>
+                    <div class="addDueDate">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        <input type="date">
+                    </div>
+                    <!-- <div class="addExtraNote">
+                        <span class="material-symbols-outlined">note_alt</span>
+                    </div> -->
+                    <button type="button">Cancel</button>
+                    <button type="button">Add task</button>
+                </form>
+
+                <button type="button">+</button>
+
+            </div>
+            <!--     TASKS     -->
+
+
+                <div class="main">
+                    <h1>Today</h1>
+
+                    <div class="list">
+                        <template>
+                            <div class="task">
+                                <div class="deleteBtn"></div>
+                                <h3></h3>
+                                <p></p>
+                                <p></p>
+                            </div>
+                        </template>
+                        <!-- <div class="task">
+                            <div class="deleteBtn"></div>
+                            <h3>Water palnts</h3>
+                            <p>Home</p>
+                            <p>by today</p>
+                        </div>
+                        <div class="task">
+                            <div class="deleteBtn"></div>
+                            <h3>Send emails</h3>
+                            <p>Work</p>
+                            <p>by tomorrow</p>
+                        </div>
+                        <div class="task">
+                            <div class="deleteBtn"></div>
+                            <h3>plan trip</h3>
+                            <p>family</p>
+                            <p>by 15th june</p>
+                        </div>
+                        <div class="task">
+                            <div class="deleteBtn"></div>
+                            <h3>Buy Groceries</h3>
+                            <p>home</p>
+
+                        </div>
+                        <div class="task">
+                            <div class="deleteBtn"></div>
+                            <h3>Call Edie</h3>
+                            <p>Personal</p>
+                        </div> -->
+
+
+
+                    </div>
+                    <button type="button">+ add task</button>
+
+            </div>
+
+            <!-- <div class="addTaskScreen">
+                <form >
+                    <div class='task'>
+                        <input type="text" id="addTask">
+                        <label for="addTask">Add a task</label>
+                    </div>
+                    <div class="addProject">
+                        <span class="material-symbols-outlined">folder_open</span>
+                    </div>
+                    <div class="addPriority">
+                        <span class="material-symbols-outlined">flag</span>
+                    </div>
+                    <div class="addDueDate">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                    </div>
+                    <div class="addExtraNote">
+                        <span class="material-symbols-outlined">note_alt</span>
+                    </div>
+                    <button type="button">Cancel</button>
+                    <button type="button">Add task</button>
+                </form>
+            </div>
+ -->
+        </div>
+        <script src="styles.js" ></script>
+        <script src="main.js" ></script>
+    </body>
+</html>
