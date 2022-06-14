@@ -15,5 +15,4 @@ function updateLocalStorage(tasks){
     let data = JSON.stringify(tasks)
     localStorage.setItem('tasks', data);
 }
-
 export default {getData, updateLocalStorage};

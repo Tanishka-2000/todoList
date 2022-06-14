@@ -1,6 +1,9 @@
 import database from './database.js';
+import domElements form './domElements.js';
 
-export default function loadScreen(projectList, taskList){
+export default function loadScreen(){
+    const projectList = domElements.getProjectList();
+    const taskList = domElements.getTaskList();
 
     let {projects, tasks} = database.getData();
     let projectTemplate = projectList.querySelector('template');
@@ -12,7 +15,6 @@ export default function loadScreen(projectList, taskList){
             projectList.appendChild(div);
         });
     }
-
 
     let taskTemplate = taskList.querySelector('template');
     if(tasks){
