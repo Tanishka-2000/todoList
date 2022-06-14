@@ -36,10 +36,9 @@
 }
 
 .sidebar{
-
     background-color: #DF7861;
-    grid-row: 1/3;
-    font-size: 2rem;
+    grid-row: 1/-1;
+    font-size: 1.6rem;
     font-family: 'Roboto', sans-serif;
     padding: 50px;
     padding-right: 0;
@@ -86,14 +85,24 @@
     font-size: 1.6rem;
     color: white;
 }
-.sidebar input{
+.sidebar input#projectInput{
     font-size: 1.6rem;
     background-color: inherit;
     color: #FCF8E8;
     border: none;
     border-bottom: 1px solid #FCF8E8;
     outline: none;
-    /* display: none; */
+    display: none;
+}
+.sidebar .projects div{
+    display: grid;
+    grid-template-columns: 50px 300px 1fr;
+    align-items: center;
+}
+.sidebar .projects div span:nth-of-type(2){
+    color: #DF7861;
+    cursor: pointer;
+    justify-self: center;
 }
 /* --------------- */
 .header{
@@ -135,7 +144,7 @@ form input{
     border: none;
     border-bottom: 1px solid #94B49F;
     outline: none;
-    font-size: 2rem;
+    font-size: 1.5rem;
     background-color: inherit;
     color: #94B49F;
 }
@@ -191,13 +200,6 @@ form .addDueDate{
     position: relative;
     font-size: 1rem;
 }
-
-/* form .addPriority:hover > *,
-form .addProject:hover > *,
-form .addDueDate:hover > *{
-    display: block;
-} */
-
 
 form .addPriority> div,
 form .addProject> div{
@@ -267,4 +269,10 @@ form .addProject> div>p:hover{
     outline: none;
     margin: 20px;
     color: gray;
+}
+.main .deleteBtn.deleted{
+    background-color: #DF7861;
+}
+.main .deleteBtn.deleted + h3{
+    text-decoration-line: line-through;
 }
