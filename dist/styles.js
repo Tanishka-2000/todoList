@@ -45,3 +45,9 @@ dateInput.addEventListener('input',function(e) {
     e.target.style.display = 'none';
     console.log(e.target.value);
 });
+// sidebar--------------
+
+const addProject = document.querySelector('.sidebar button');
+addProject.addEventListener('click',function(e){
+    e.target.nextElementSibling.style.display = "block";
+});
