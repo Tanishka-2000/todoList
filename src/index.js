@@ -1,3 +1,28 @@
+import isToday from 'date-fns/isToday'
+// helper functions of date fns
+// differenceInDays
+// isToday
+// isTomorrow
+
+// sorting project
+const sortTasks = (function(){
+    function today(tasks){
+        let todayTask = []
+        for (let i = 0; i < tasks.length; i++) {
+            if(tasks[i].duedate){
+                let date = new Date(tasks[i].duedate);
+                if(isToday(date)){
+                    todayTask.push(tasks[i]);
+                }
+
+            }else{
+                todayTask.push(tasks[i]);
+            }
+        }
+        console.log(todayTask);
+    }
+    return {today};
+})();
 // geeting and returning dom domElements
 const domElements = {
      heading : document.querySelector('.main>h1'),
@@ -8,7 +33,7 @@ const domElements = {
  }
 
  // form utility functions
- formControls = {
+ const formControls = {
      showForm: function(){
                  let form = domElements.form;
                  form.style.display = 'flex';
@@ -84,6 +109,7 @@ const load = (function(){
         if(tasks) tasks.forEach(task => loadTask(task));
 
         handleTask.setTask({projects, tasks, taskId});
+        sortTasks.today(tasks);
     }
 
     function loadTask(task){
@@ -107,7 +133,7 @@ const load = (function(){
         div.querySelector('div').insertBefore(document.createTextNode(project), delBtn);
         projectList.appendChild(div);
     }
-    //
+
     // function removeTask(id){
     //     let index = 0;
     //     let tasks = taskList.querySelectorAll('div');
@@ -117,10 +143,9 @@ const load = (function(){
     //             index = i;
     //             break;
     //         }
-    //     }
+    //      }
     //     tasks[index].remove();
     // }
-
     return {loadScreen, loadTask, loadProject};
 })();
 
@@ -167,7 +192,8 @@ const handleTask = (function(){
     function findIndex(id){
         let index = null;
         for (let i = 0; i < tasks.length; i++) {
-            if(tasks[i].id === id){
+
+            if(tasks[i].id == id){
                 index = i;
                 break;
             }
