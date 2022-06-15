@@ -74,6 +74,7 @@
     background-color: #FCF8E8;
     opacity: .9;
     color: #DF7861;
+    cursor: pointer;
 }
 .icon{
     font-size: 2rem;
@@ -84,6 +85,7 @@
     background-color: inherit;
     font-size: 1.6rem;
     color: white;
+    cursor: pointer;
 }
 .sidebar input#projectInput{
     font-size: 1.6rem;
@@ -114,6 +116,9 @@
     font-size: 3rem;
     padding-left: 100px;
     padding-right: 100px;
+}
+.header button{
+    cursor: pointer;
 }
 .header button:nth-child(3){
     width: 70px;
@@ -258,8 +263,8 @@ form .addProject> div>p:hover{
     height: 30px;
     width: 30px;
     border-radius: 50%;
-
-    border: 2px solid #DF7861;
+    border-color: red;
+    border: 3px solid;
 }
 .main button{
     width: 200px;
@@ -271,7 +276,7 @@ form .addProject> div>p:hover{
     color: gray;
 }
 .main .deleteBtn.deleted{
-    background-color: #DF7861;
+    background-color: orange;
 }
 .main .deleteBtn.deleted + h3{
     text-decoration-line: line-through;
