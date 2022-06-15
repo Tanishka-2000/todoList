@@ -43,7 +43,6 @@ duedateIcon.addEventListener('click',function(e){
 
 dateInput.addEventListener('input',function(e) {
     e.target.style.display = 'none';
-    console.log(e.target.value);
 });
 // sidebar--------------
 

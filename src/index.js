@@ -1,28 +1,55 @@
-import isToday from 'date-fns/isToday'
+import isToday from 'date-fns/isToday';
+import isTomorrow from 'date-fns/isTomorrow';
+import differenceInDays from 'date-fns/differenceInDays'
 // helper functions of date fns
 // differenceInDays
 // isToday
 // isTomorrow
 
 // sorting project
-const sortTasks = (function(){
-    function today(tasks){
-        let todayTask = []
+const sortTasks ={
+    tasks: [],
+    byDate: function(){
+        let tasks = this.tasks;
+        let today = [];
+        let tomorrow = [];
+        let upcoming = [];
+        let anytime = [];
+        let todayDate = new Date();
         for (let i = 0; i < tasks.length; i++) {
             if(tasks[i].duedate){
                 let date = new Date(tasks[i].duedate);
-                if(isToday(date)){
-                    todayTask.push(tasks[i]);
-                }
+                if(isToday(date)) today.push(tasks[i]);
+                else if(isTomorrow(date)) tomorrow.push(tasks[i]);
+                else if(differenceInDays(date, todayDate) < 7) upcoming.push(tasks[i]);
+                else anytime.push(tasks[i]);
 
             }else{
-                todayTask.push(tasks[i]);
+                today.push(tasks[i]);
             }
         }
-        console.log(todayTask);
+        return {today, tomorrow, upcoming, anytime};
+    },
+    byProject: function(){
+        let tasks = this.tasks;
+        let taskByPprojects = {};
+        for (let i = 0; i < tasks.length; i++) {
+            if(tasks[i].project){
+                if(!taskByPprojects.hasOwnProperty(tasks[i].project)) taskByPprojects[tasks[i].project] = [];
+                taskByPprojects[tasks[i].project].push(tasks[i]);
+            }
+        }
+        return taskByPprojects;
+    },
+    important: function(){
+        let tasks = this.tasks;
+        let important = [];
+        for (let i = 0; i < tasks.length; i++) {
+            if(tasks[i].priority == 'priority high') important.push(tasks[i]);
+        }
+        return important;
     }
-    return {today};
-})();
+}
 // geeting and returning dom domElements
 const domElements = {
      heading : document.querySelector('.main>h1'),
@@ -100,6 +127,7 @@ const load = (function(){
     const taskList = domElements.taskList;
     let projectTemplate = projectList.querySelector('template');
     let taskTemplate = taskList.querySelector('template');
+    const projectDropDown = domElements.form.querySelector('.addProject div');
 
     function loadScreen(){
 
@@ -109,7 +137,10 @@ const load = (function(){
         if(tasks) tasks.forEach(task => loadTask(task));
 
         handleTask.setTask({projects, tasks, taskId});
-        sortTasks.today(tasks);
+        sortTasks.tasks = tasks;
+        // console.log(sortTasks.byDate());
+        // console.log(sortTasks.byProject());
+        // console.log(sortTasks.important());
     }
 
     function loadTask(task){
@@ -132,8 +163,33 @@ const load = (function(){
         delBtn.addEventListener('click', handleTask.deleteProject);
         div.querySelector('div').insertBefore(document.createTextNode(project), delBtn);
         projectList.appendChild(div);
+
+        // adding projects to form dropdown
+        let p = document.createElement('p');
+        p.appendChild(document.createTextNode(project))
+        projectDropDown.appendChild(p);
     }
 
+    function loadTaskByDate(e){
+        let tasksToShow = [];
+        if(e.target.textContent.toLowerCase().includes('important')){
+            tasksToShow = sortTasks.important();
+        }else{
+            let sortedTasks = sortTasks.byDate();
+            for(let prop in sortedTasks){
+                if(e.target.textContent.toLowerCase().includes(prop)){
+                    tasksToShow = sortedTasks[prop];
+                }
+            }
+        }
+        console.log(tasksToShow);
+        taskList.innerHTML = '';
+        tasksToShow.forEach(item => loadTask(item));
+    }
+
+    function loadTaskByProject(e){
+        console.log(e.target.textContent);
+    }
     // function removeTask(id){
     //     let index = 0;
     //     let tasks = taskList.querySelectorAll('div');
@@ -146,7 +202,7 @@ const load = (function(){
     //      }
     //     tasks[index].remove();
     // }
-    return {loadScreen, loadTask, loadProject};
+    return {loadScreen, loadTask, loadProject, loadTaskByDate};
 })();
 
 // utility functions to handle task
@@ -228,16 +284,27 @@ const handleTask = (function(){
 })();
 
 
-// ----------adding event listeners to buttons
+// ----------adding event listeners
+// form buttons
 const headerButtons = document.querySelectorAll('.header button');
 const headerFormCancelBtn = headerButtons[0];
 const headerformAddTaskBtn = headerButtons[1];
 const headerShowFormBtn = headerButtons[2];
-const projectInput = document.querySelector('.sidebar #projectInput');
 
 headerShowFormBtn.addEventListener('click', formControls.showForm);
 headerformAddTaskBtn.addEventListener('click', handleTask.addNewTask);
 headerFormCancelBtn.addEventListener('click', function(){formControls.cancelForm()});
+
+// input field for new project
+const projectInput = document.querySelector('.sidebar #projectInput');
 projectInput.addEventListener('change', handleTask.addProject);
+
+// options  to sort task
+const options = document.querySelectorAll('.sidebar .options div');
+options.forEach(item => {
+    item.addEventListener('click', load.loadTaskByDate);
+});
+
+
 
 load.loadScreen();
