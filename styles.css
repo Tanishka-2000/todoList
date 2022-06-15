@@ -205,6 +205,9 @@ form .addDueDate{
     position: relative;
     font-size: 1rem;
 }
+form .addDueDate{
+    font-size: .8rem;    
+}
 
 form .addPriority> div,
 form .addProject> div{
