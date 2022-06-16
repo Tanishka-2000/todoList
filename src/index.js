@@ -48,8 +48,16 @@ const sortTasks ={
             if(tasks[i].priority == 'priority high') important.push(tasks[i]);
         }
         return important;
+    },
+    byInput: function(string){
+        let tasks = this.tasks;
+        let result = [];
+        for (let i = 0; i < tasks.length; i++) {
+            if(tasks[i].title.includes(string)) result.push(tasks[i]);
+        }
+        return result;
     }
-}
+};
 // geeting and returning dom domElements
 const domElements = {
      heading : document.querySelector('.main>h1'),
@@ -57,7 +65,9 @@ const domElements = {
      projectList : document.querySelector('.sidebar .projects'),
      projectInput : document.querySelector('.sidebar input'),
      form : document.querySelector('.header form'),
- }
+     addTaskBtn: document.querySelector('.main button'),
+     searchInput: document.querySelector('.sidebar #search')
+ };
 
  // form utility functions
  const formControls = {
@@ -164,6 +174,10 @@ const load = (function(){
         div.querySelector('div').insertBefore(document.createTextNode(project), delBtn);
         projectList.appendChild(div);
 
+        // adding event listeners to projects
+        let allDivs = Array.from(projectList.querySelectorAll('div'));
+        allDivs[allDivs.length -1].addEventListener('click', loadTaskByProject);
+
         // adding projects to form dropdown
         let p = document.createElement('p');
         p.appendChild(document.createTextNode(project))
@@ -172,23 +186,45 @@ const load = (function(){
 
     function loadTaskByDate(e){
         let tasksToShow = [];
+        let heading = '';
         if(e.target.textContent.toLowerCase().includes('important')){
             tasksToShow = sortTasks.important();
+            heading = 'Important';
         }else{
             let sortedTasks = sortTasks.byDate();
             for(let prop in sortedTasks){
                 if(e.target.textContent.toLowerCase().includes(prop)){
                     tasksToShow = sortedTasks[prop];
+                    heading = prop;
                 }
             }
         }
-        console.log(tasksToShow);
+        // console.log(tasksToShow);
         taskList.innerHTML = '';
+        domElements.heading.textContent = heading;
         tasksToShow.forEach(item => loadTask(item));
     }
 
     function loadTaskByProject(e){
-        console.log(e.target.textContent);
+        let tasksToShow = [];
+        let proj = e.target.textContent.slice(11,-6);
+        // console.log(proj);
+        let sortedProjects = sortTasks.byProject();
+        console.log(sortedProjects);
+        for(let prop in sortedProjects){
+            if(proj === prop) tasksToShow = sortedProjects[prop];
+        }
+        taskList.innerHTML = '';
+        domElements.heading.textContent = proj;
+        tasksToShow.forEach(task => loadTask(task));
+
+    }
+    function loadTaskByInput(e){
+        let string = e.target.value;
+        let filteredTask = sortTasks.byInput(string);
+        taskList.innerHTML = '';
+        filteredTask.forEach(task => loadTask(task));
+
     }
     // function removeTask(id){
     //     let index = 0;
@@ -202,7 +238,7 @@ const load = (function(){
     //      }
     //     tasks[index].remove();
     // }
-    return {loadScreen, loadTask, loadProject, loadTaskByDate};
+    return {loadScreen, loadTask, loadProject, loadTaskByDate, loadTaskByInput};
 })();
 
 // utility functions to handle task
@@ -225,6 +261,7 @@ const handleTask = (function(){
     }
     function deleteTask(e){
         e.target.classList.add('deleted');
+
         let id = e.target.getAttribute('data-taskId');
         let index = findIndex(id);
         tasks.splice(index, 1);
@@ -304,7 +341,11 @@ const options = document.querySelectorAll('.sidebar .options div');
 options.forEach(item => {
     item.addEventListener('click', load.loadTaskByDate);
 });
+// showing  form on clicking add task button on main Screen
+domElements.addTaskBtn.addEventListener('click',formControls.showForm);
 
+// search bar
+domElements.searchInput.addEventListener('input', load.loadTaskByInput);
 
-
+// loading Screen
 load.loadScreen();
