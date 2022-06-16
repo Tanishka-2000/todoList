@@ -1,6 +1,7 @@
 import isToday from 'date-fns/isToday';
 import isTomorrow from 'date-fns/isTomorrow';
 import differenceInDays from 'date-fns/differenceInDays'
+
 // helper functions of date fns
 // differenceInDays
 // isToday
@@ -176,7 +177,10 @@ const load = (function(){
 
         // adding event listeners to projects
         let allDivs = Array.from(projectList.querySelectorAll('div'));
-        allDivs[allDivs.length -1].addEventListener('click', loadTaskByProject);
+        allDivs[allDivs.length -1].addEventListener('click', function(e){
+            let proj = e.target.textContent.slice(11,-6);
+            loadTaskByProject(proj)
+        });
 
         // adding projects to form dropdown
         let p = document.createElement('p');
@@ -205,12 +209,11 @@ const load = (function(){
         tasksToShow.forEach(item => loadTask(item));
     }
 
-    function loadTaskByProject(e){
+    function loadTaskByProject(proj){
         let tasksToShow = [];
-        let proj = e.target.textContent.slice(11,-6);
         // console.log(proj);
         let sortedProjects = sortTasks.byProject();
-        console.log(sortedProjects);
+        // console.log(sortedProjects);
         for(let prop in sortedProjects){
             if(proj === prop) tasksToShow = sortedProjects[prop];
         }
@@ -226,19 +229,7 @@ const load = (function(){
         filteredTask.forEach(task => loadTask(task));
 
     }
-    // function removeTask(id){
-    //     let index = 0;
-    //     let tasks = taskList.querySelectorAll('div');
-    //     for (let i = 0; i < tasks.length; i++) {
-    //         let taskId = tasks[i].querySelector('.deleteBtn').getAttribute('data-taskId');
-    //         if(taskId == id){
-    //             index = i;
-    //             break;
-    //         }
-    //      }
-    //     tasks[index].remove();
-    // }
-    return {loadScreen, loadTask, loadProject, loadTaskByDate, loadTaskByInput};
+    return {loadScreen, loadTask, loadProject, loadTaskByDate, loadTaskByProject, loadTaskByInput};
 })();
 
 // utility functions to handle task
@@ -260,39 +251,23 @@ const handleTask = (function(){
         database.updateTask(tasks);
     }
     function deleteTask(e){
-        e.target.classList.add('deleted');
-
+        // e.target.classList.add('deleted');
         let id = e.target.getAttribute('data-taskId');
-        let index = findIndex(id);
-        tasks.splice(index, 1);
+        tasks = tasks.filter(task => task.id != id);
         database.updateTask(tasks);
         e.target.parentElement.remove();
-        // load.removeTask(id);
     }
     function deleteProject(e){
         let index = 0;
-        let name = e.target.parentElement.textContent;
-        for (let i = 0; i < projects.length; i++) {
-            if(name.includes(projects[i])){
-                index = i;
-                break;
-            }
+        let name = e.target.parentElement.textContent.slice(11,-6);
+        if(sortTasks.byProject()[name]) load.loadTaskByProject(name);
+        else{
+            projects = projects.filter(project => project != name);
+            database.updateProject(projects);
+            e.target.parentElement.remove();
         }
-        projects.splice(index, 1);
-        database.updateProject(projects);
-        e.target.parentElement.remove();
-    }
-    function findIndex(id){
-        let index = null;
-        for (let i = 0; i < tasks.length; i++) {
-
-            if(tasks[i].id == id){
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
+        e.stopPropagation();
+     }
     function addNewTask(){
         let task = makeTask();
         formControls.cancelForm();
