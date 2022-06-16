@@ -1,6 +1,7 @@
-let today = new Date();
+let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+let today  = new Date();
 let date = document.querySelector('.header div');
-date.textContent = today.toDateString();
+date.textContent = today.toLocaleDateString("en-US", options);
 
 const projectIcon = document.querySelector('form .addProject');
 const priorityIcon = document.querySelector('form .addPriority');
