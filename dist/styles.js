@@ -5,10 +5,10 @@ date.textContent = today.toLocaleDateString("en-US", options);
 
 const projectIcon = document.querySelector('form .addProject');
 const priorityIcon = document.querySelector('form .addPriority');
+const duedateIcon = document.querySelector('form .addDueDate');
 
 const projectDiv = document.querySelector('form .addProject div');
 const priorityDiv = document.querySelector('form .addPriority div');
-const duedateIcon = document.querySelector('form .addDueDate');
 const dateInput = document.querySelector('form .addDueDate input');
 
 projectDiv.addEventListener('click',function(e){

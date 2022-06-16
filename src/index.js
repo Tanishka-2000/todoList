@@ -2,16 +2,15 @@ import isToday from 'date-fns/isToday';
 import isTomorrow from 'date-fns/isTomorrow';
 import differenceInDays from 'date-fns/differenceInDays'
 
-// helper functions of date fns
-// differenceInDays
-// isToday
-// isTomorrow
-
+const data ={
+    id : 0,
+    projects : [],
+    tasks : [],
+};
 // sorting project
 const sortTasks ={
-    tasks: [],
     byDate: function(){
-        let tasks = this.tasks;
+        let tasks = data.tasks;
         let today = [];
         let tomorrow = [];
         let upcoming = [];
@@ -32,7 +31,7 @@ const sortTasks ={
         return {today, tomorrow, upcoming, anytime};
     },
     byProject: function(){
-        let tasks = this.tasks;
+        let tasks = data.tasks;
         let taskByPprojects = {};
         for (let i = 0; i < tasks.length; i++) {
             if(tasks[i].project){
@@ -43,7 +42,7 @@ const sortTasks ={
         return taskByPprojects;
     },
     important: function(){
-        let tasks = this.tasks;
+        let tasks = data.tasks;
         let important = [];
         for (let i = 0; i < tasks.length; i++) {
             if(tasks[i].priority == 'priority high') important.push(tasks[i]);
@@ -51,7 +50,7 @@ const sortTasks ={
         return important;
     },
     byInput: function(string){
-        let tasks = this.tasks;
+        let tasks = data.tasks;
         let result = [];
         for (let i = 0; i < tasks.length; i++) {
             if(tasks[i].title.includes(string)) result.push(tasks[i]);
@@ -59,15 +58,18 @@ const sortTasks ={
         return result;
     }
 };
-// geeting and returning dom domElements
+
+// getting and returning dom domElements
 const domElements = {
      heading : document.querySelector('.main>h1'),
      taskList : document.querySelector('.main .list'),
      projectList : document.querySelector('.sidebar .projects'),
-     projectInput : document.querySelector('.sidebar input'),
      form : document.querySelector('.header form'),
      addTaskBtn: document.querySelector('.main button'),
-     searchInput: document.querySelector('.sidebar #search')
+     searchInput: document.querySelector('.sidebar #search'),
+     headerButtons: document.querySelectorAll('.header button'),
+     projectInput: document.querySelector('.sidebar #projectInput'),
+     options: document.querySelectorAll('.sidebar .options div')
  };
 
  // form utility functions
@@ -102,32 +104,29 @@ const domElements = {
              }
  };
 
-// database
+ // functions to interact with database
 const database = {
 getData: function(){
-            if(localStorage.getItem('tasks')) {
                 let projects = localStorage.getItem('projects');
                 let tasks = localStorage.getItem('tasks');
                 let taskId = localStorage.getItem('taskId');
 
-                projects = JSON.parse(projects);
-                tasks = JSON.parse(tasks);
-                taskId = JSON.parse(taskId);
+                projects = JSON.parse(projects) ?? [];
+                tasks = JSON.parse(tasks) ?? [];
+                taskId = JSON.parse(taskId) ?? 0;
 
                 return {projects, tasks, taskId};
-            }
-            return {projects:[], tasks:[], taskId:0};
         },
-updateTask: function(tasks){
-                    let taskString = JSON.stringify(tasks)
+updateTask: function(){
+                    let taskString = JSON.stringify(data.tasks)
                     localStorage.setItem('tasks', taskString);
                 },
-updateProject: function(projects){
-                    let projectString = JSON.stringify(projects);
+updateProject: function(){
+                    let projectString = JSON.stringify(data.projects);
                     localStorage.setItem('projects', projectString);
                 },
-updateId: function(taskId){
-                let taskIdString = JSON.stringify(taskId);
+updateId: function(){
+                let taskIdString = JSON.stringify(data.id);
                 localStorage.setItem('taskId', taskIdString);
             }
 }
@@ -147,11 +146,9 @@ const load = (function(){
         if(projects) projects.forEach(project => loadProject(project));
         if(tasks) tasks.forEach(task => loadTask(task));
 
-        handleTask.setTask({projects, tasks, taskId});
-        sortTasks.tasks = tasks;
-        // console.log(sortTasks.byDate());
-        // console.log(sortTasks.byProject());
-        // console.log(sortTasks.important());
+        data.id = taskId;
+        data.projects = projects;
+        data.tasks = tasks;
     }
 
     function loadTask(task){
@@ -226,6 +223,7 @@ const load = (function(){
         let string = e.target.value;
         let filteredTask = sortTasks.byInput(string);
         taskList.innerHTML = '';
+        domElements.heading.textContent = 'Tasks';
         filteredTask.forEach(task => loadTask(task));
 
     }
@@ -234,40 +232,19 @@ const load = (function(){
 
 // utility functions to handle task
 const handleTask = (function(){
-    let id = 0;
-    let projects = [];
-    let tasks = [];
     function getId(){
-        id++;
-        database.updateId(id);
-        return id;
+        data.id++;
+        database.updateId();
+        return data.id;
     }
     function task(title, duedate, priority, project){
         let id = getId();
         return {id, title, duedate, priority, project};
     }
     function addTask(task){
-        tasks.push(task);
-        database.updateTask(tasks);
+        data.tasks.push(task);
+        database.updateTask();
     }
-    function deleteTask(e){
-        // e.target.classList.add('deleted');
-        let id = e.target.getAttribute('data-taskId');
-        tasks = tasks.filter(task => task.id != id);
-        database.updateTask(tasks);
-        e.target.parentElement.remove();
-    }
-    function deleteProject(e){
-        let index = 0;
-        let name = e.target.parentElement.textContent.slice(11,-6);
-        if(sortTasks.byProject()[name]) load.loadTaskByProject(name);
-        else{
-            projects = projects.filter(project => project != name);
-            database.updateProject(projects);
-            e.target.parentElement.remove();
-        }
-        e.stopPropagation();
-     }
     function addNewTask(){
         let task = makeTask();
         formControls.cancelForm();
@@ -279,41 +256,53 @@ const handleTask = (function(){
         let newTask = task(o.task.value, o.duedate.value || null, o.priority.value || null, o.project.value || null);
         return newTask;
     }
-    function setTask(temp){
-        projects = temp.projects;
-        tasks = temp.tasks;
-        id = temp.taskId;
+    function deleteTask(e){
+        // e.target.classList.add('deleted');
+        let id = e.target.getAttribute('data-taskId');
+        data.tasks = data.tasks.filter(task => task.id != id);
+        database.updateTask();
+        e.target.parentElement.remove();
     }
     function addProject(e){
         let projectName = e.target.value;
-        projects.push(projectName);
-        database.updateProject(projects);
+        data.projects.push(projectName);
+        database.updateProject();
         load.loadProject(projectName);
         e.target.value = '';
         e.target.style.display = 'none';
     }
-    return {addNewTask, deleteTask, setTask, addProject, deleteProject};
+    function deleteProject(e){
+        let index = 0;
+        let name = e.target.parentElement.textContent.slice(11,-6);
+        // console.log(sortTasks.byProject()[name]);
+        if(sortTasks.byProject()[name]) load.loadTaskByProject(name);
+        else{
+            data.projects = data.projects.filter(project => project != name);
+            database.updateProject();
+            e.target.parentElement.remove();
+        }
+        e.stopPropagation();
+     }
+    return {addNewTask, deleteTask, addProject, deleteProject};
 })();
 
 
 // ----------adding event listeners
+
 // form buttons
-const headerButtons = document.querySelectorAll('.header button');
-const headerFormCancelBtn = headerButtons[0];
-const headerformAddTaskBtn = headerButtons[1];
-const headerShowFormBtn = headerButtons[2];
+const headerFormCancelBtn = domElements.headerButtons[0];
+const headerformAddTaskBtn = domElements.headerButtons[1];
+const headerShowFormBtn = domElements.headerButtons[2];
 
 headerShowFormBtn.addEventListener('click', formControls.showForm);
 headerformAddTaskBtn.addEventListener('click', handleTask.addNewTask);
 headerFormCancelBtn.addEventListener('click', function(){formControls.cancelForm()});
 
 // input field for new project
-const projectInput = document.querySelector('.sidebar #projectInput');
-projectInput.addEventListener('change', handleTask.addProject);
+domElements.projectInput.addEventListener('change', handleTask.addProject);
 
 // options  to sort task
-const options = document.querySelectorAll('.sidebar .options div');
-options.forEach(item => {
+domElements.options.forEach(item => {
     item.addEventListener('click', load.loadTaskByDate);
 });
 // showing  form on clicking add task button on main Screen
